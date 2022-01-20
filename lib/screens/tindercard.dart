@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rivpod/card_provider.dart';
-import 'package:rivpod/user.dart';
+import 'package:rivpod/infrastructure/card_provider.dart';
+import 'package:rivpod/model/user.dart';
 
 class TinderCard extends ConsumerStatefulWidget {
   const TinderCard({

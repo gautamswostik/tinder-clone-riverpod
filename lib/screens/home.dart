@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rivpod/tindercard.dart';
-import 'package:rivpod/user.dart';
+import 'package:rivpod/screens/tindercard.dart';
+import 'package:rivpod/model/user.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);

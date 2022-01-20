@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rivpod/home.dart';
+import 'package:rivpod/screens/home.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
