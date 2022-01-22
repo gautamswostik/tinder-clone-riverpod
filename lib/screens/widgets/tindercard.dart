@@ -2,15 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rivpod/infrastructure/card_provider.dart';
+import 'package:rivpod/screens/likes/widget/card_provider.dart';
 import 'package:rivpod/model/user.dart';
 
 class TinderCard extends ConsumerStatefulWidget {
   const TinderCard({
     Key? key,
     required this.user,
+    required this.isFront,
   }) : super(key: key);
   final User user;
+  final bool isFront;
   @override
   _TinderCardState createState() => _TinderCardState();
 }
@@ -18,7 +20,7 @@ class TinderCard extends ConsumerStatefulWidget {
 class _TinderCardState extends ConsumerState<TinderCard> {
   @override
   void initState() {
-    WidgetsBinding.instance!.addPersistentFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       final size = MediaQuery.of(context).size;
       ref.read(cardProvider).setScreenSize(size);
     });
@@ -27,7 +29,9 @@ class _TinderCardState extends ConsumerState<TinderCard> {
 
   @override
   Widget build(BuildContext context) {
-    return buildFrontCard();
+    return SizedBox.expand(
+      child: widget.isFront ? buildFrontCard() : buildNormalCard(),
+    );
   }
 
   Widget buildFrontCard() {
@@ -58,11 +62,29 @@ class _TinderCardState extends ConsumerState<TinderCard> {
               curve: Curves.easeInOut,
               duration: Duration(milliseconds: millisecond),
               transform: rotatedMatrix..translate(position.dx, position.dy),
-              child: buildCard(),
+              child: Stack(children: [
+                buildCard(),
+                buildStamps(),
+              ]),
             ),
           );
         });
       },
+    );
+  }
+
+  Widget buildNormalCard() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(widget.user.urlImage),
+            fit: BoxFit.cover,
+            // alignment: const Alignment(-0.3, 0),
+          ),
+        ),
+      ),
     );
   }
 
@@ -93,6 +115,9 @@ class _TinderCardState extends ConsumerState<TinderCard> {
                 const Spacer(),
                 buildName(),
                 buildStatus(),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 90),
+                ),
               ],
             ),
           ),
@@ -150,6 +175,85 @@ class _TinderCardState extends ConsumerState<TinderCard> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildStamps() {
+    final statusProvider = ref.watch(cardProvider).getStatus();
+    final opacity = ref.watch(cardProvider).getStatusOpacity();
+
+    switch (statusProvider) {
+      case CardStatus.like:
+        final child = buildStamp(
+          angle: -0.5,
+          color: Colors.green,
+          text: 'Like'.toUpperCase(),
+          opacity: opacity,
+        );
+        return Positioned(
+          top: 64,
+          left: 50,
+          child: child,
+        );
+
+      case CardStatus.dislike:
+        final child = buildStamp(
+          angle: 0.5,
+          color: Colors.red,
+          text: 'nope'.toUpperCase(),
+          opacity: opacity,
+        );
+        return Positioned(
+          top: 64,
+          right: 50,
+          child: child,
+        );
+      case CardStatus.superlike:
+        final child = Center(
+          child: buildStamp(
+            color: Colors.blue,
+            text: 'super\nlike'.toUpperCase(),
+            opacity: opacity,
+          ),
+        );
+        return Positioned(
+          bottom: 128,
+          right: 0,
+          left: 0,
+          child: child,
+        );
+      default:
+        return Container();
+    }
+  }
+
+  Widget buildStamp({
+    double angle = 0,
+    required Color color,
+    required String text,
+    required double opacity,
+  }) {
+    return Opacity(
+      opacity: opacity,
+      child: Transform.rotate(
+        angle: angle,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: color, width: 4),
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: color,
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

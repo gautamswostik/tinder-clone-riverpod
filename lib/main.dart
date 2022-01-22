@@ -1,37 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rivpod/screens/home.dart';
+import 'package:rivpod/app/app.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    ProviderScope(observers: [Logger()], child: const MyApp()),
-  );
-}
-
-class MyApp extends ConsumerWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        // ! Set elevated button theme
-        // elevatedButtonTheme: ElevatedButtonThemeData(
-        //   style: ElevatedButton.styleFrom(
-        //     elevation: 8,
-        //     primary: Colors.white,
-        //     shape: const CircleBorder(),
-        //     minimumSize: const Size.square(80),
-        //   ),
-        // ),
-      ),
-      home: const MyHomePage(title: 'tinder'),
-    );
-  }
+  await Firebase.initializeApp();
+  runApp(ProviderScope(observers: [Logger()], child: const App()));
 }
 
 class Logger extends ProviderObserver {

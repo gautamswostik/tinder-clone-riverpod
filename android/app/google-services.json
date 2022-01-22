@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "473049329791",
+    "project_id": "mayagara-7b545",
+    "storage_bucket": "mayagara-7b545.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473049329791:android:dbda7d4a0b1f4e2af88f4a",
+        "android_client_info": {
+          "package_name": "com.example.learningdating"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473049329791-7vbi9ppplkmouiciimjcq8ev0m8q12v9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEfKs1DUO5qGPa3EJexe9jNLfY7eUuxK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473049329791-7vbi9ppplkmouiciimjcq8ev0m8q12v9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
