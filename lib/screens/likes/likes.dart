@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rivpod/application/auth/auth_controller.dart';
 import 'package:rivpod/screens/likes/widget/card_provider.dart';
 import 'package:rivpod/screens/likes/widget/tindercard.dart';
 import 'package:rivpod/utils/user_list.dart';
@@ -27,14 +28,22 @@ class _MyHomePageState extends State<LikesScreen> {
         appBar: AppBar(
           leading: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ClipOval(
-              child: Image.network(
-                'https://wallpapershome.com/images/wallpapers/model-2160x3840-girl-brunette-4k-19523.jpg',
-                width: 30,
-                height: 30,
-                fit: BoxFit.cover,
-              ),
-            ),
+            child: Consumer(builder: (context, ref, child) {
+              final authentication = ref.read(authController.notifier);
+              return InkWell(
+                onTap: () {
+                  authentication.signOut();
+                },
+                child: ClipOval(
+                  child: Image.network(
+                    'https://wallpapershome.com/images/wallpapers/model-2160x3840-girl-brunette-4k-19523.jpg',
+                    width: 30,
+                    height: 30,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            }),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,

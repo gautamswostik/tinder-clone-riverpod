@@ -5,7 +5,8 @@ import 'package:rivpod/app/entities/app_state.dart';
 import 'package:rivpod/application/core/base_state.dart';
 import 'package:rivpod/infrastructure/auth/auth_repository.dart';
 
-final authController = StateNotifierProvider.autoDispose((ref) {
+final authController =
+    StateNotifierProvider.autoDispose<AuthController, BaseState>((ref) {
   return AuthController<void>(
     ref.read,
   );
@@ -24,20 +25,26 @@ class AuthController<T> extends BaseNotifier<T> {
 
     final data = await _repo.signInWithGoodle();
 
-    state = data.fold((user) {
-      _appState.updateAppState(const AppState.authenticated(AppInfo()));
-      return const BaseState.success();
-    }, (r) => BaseState.error(r.message));
+    state = data.fold(
+      (user) {
+        _appState.updateAppState(const AppState.authenticated(AppInfo()));
+        return const BaseState.success();
+      },
+      (r) => BaseState.error(r.message),
+    );
   }
 
   Future<void> signOut() async {
     state = const BaseState.loading();
 
     final data = await _repo.signOut();
-    data.fold((_) {
-      _appState.updateAppState(const AppState.unauthenticated());
-    }, (r) {
-      return BaseState.error(r);
-    });
+    data.fold(
+      (_) {
+        _appState.updateAppState(const AppState.unauthenticated());
+      },
+      (r) {
+        return BaseState.error(r);
+      },
+    );
   }
 }
