@@ -5,11 +5,8 @@ import 'package:rivpod/app/entities/app_state.dart';
 import 'package:rivpod/application/core/base_state.dart';
 import 'package:rivpod/infrastructure/auth/auth_repository.dart';
 
-final authController =
-    StateNotifierProvider.autoDispose<AuthController, BaseState>((ref) {
-  return AuthController<void>(
-    ref.read,
-  );
+final authController = StateNotifierProvider<AuthController, BaseState>((ref) {
+  return AuthController<void>(ref.read);
 });
 
 class AuthController<T> extends BaseNotifier<T> {
@@ -20,10 +17,10 @@ class AuthController<T> extends BaseNotifier<T> {
   IAuthRepository get _repo => _read(authRepository);
   AppStateNotifier get _appState => _read(appController.notifier);
 
-  Future<void> signInWithGOogle() async {
+  Future<void> signInWithGoogle() async {
     state = const BaseState.loading();
 
-    final data = await _repo.signInWithGoodle();
+    final data = await _repo.signInWithGoogle();
 
     state = data.fold(
       (user) {
@@ -31,6 +28,20 @@ class AuthController<T> extends BaseNotifier<T> {
         return const BaseState.success();
       },
       (r) => BaseState.error(r.message),
+    );
+  }
+
+  Future<void> signInWithFacebook() async {
+    state = const BaseState.loading();
+
+    final data = await _repo.signInWithFaceBook();
+
+    state = data.fold(
+      (user) {
+        _appState.updateAppState(const AppState.authenticated(AppInfo()));
+        return const BaseState.success();
+      },
+      (r) => BaseState.error(r),
     );
   }
 

@@ -17,11 +17,23 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Consumer(
           builder: (context, ref, child) {
             final authentication = ref.read(authController.notifier);
-            return ElevatedButton(
-              child: const Text('Google'),
-              onPressed: () {
-                authentication.signInWithGOogle();
-              },
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: const Text('Google'),
+                  onPressed: () {
+                    authentication.signInWithGoogle();
+                  },
+                ),
+                ElevatedButton(
+                  child: const Text('Facebook'),
+                  onPressed: () {
+                    authentication.signInWithFacebook();
+                  },
+                ),
+              ],
             );
           },
         ),

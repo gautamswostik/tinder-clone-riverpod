@@ -49,19 +49,17 @@ class _MyHomePageState extends State<LikesScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        body: SafeArea(
-          child: Container(
-              padding: const EdgeInsets.all(6),
-              child: Stack(
-                children: [
-                  buidCards(),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: buidButtons(),
-                  ),
-                ],
-              )),
-        ),
+        body: Container(
+            padding: const EdgeInsets.all(6),
+            child: Stack(
+              children: [
+                buidCards(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: buidButtons(),
+                ),
+              ],
+            )),
       ),
     );
   }
@@ -70,25 +68,23 @@ class _MyHomePageState extends State<LikesScreen> {
     return Consumer(builder: (context, ref, child) {
       ref.read(cardProvider).setUsers(user);
       final userdata = ref.watch(cardProvider).users;
-      return Expanded(
-        child: userdata.isEmpty
-            ? Center(
-                child: ElevatedButton(
-                child: const Text('Restart'),
-                onPressed: () {
-                  ref.read(cardProvider).setUsers(user);
-                  ref.watch(cardProvider).resetUsers();
-                },
-              ))
-            : Stack(
-                children: userdata
-                    .map((e) => TinderCard(
-                          user: e,
-                          isFront: user.last == e,
-                        ))
-                    .toList(),
-              ),
-      );
+      return userdata.isEmpty
+          ? Center(
+              child: ElevatedButton(
+              child: const Text('Restart'),
+              onPressed: () {
+                ref.read(cardProvider).setUsers(user);
+                ref.watch(cardProvider).resetUsers();
+              },
+            ))
+          : Stack(
+              children: userdata
+                  .map((e) => TinderCard(
+                        user: e,
+                        isFront: user.last == e,
+                      ))
+                  .toList(),
+            );
     });
   }
 
